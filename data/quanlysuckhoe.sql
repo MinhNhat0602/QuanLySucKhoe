@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2024 at 12:04 PM
+-- Generation Time: Apr 04, 2024 at 08:40 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `quanlysuckhoe`
 --
+
 DROP DATABASE IF EXISTS `quanlysuckhoe`;
 CREATE DATABASE IF NOT EXISTS `quanlysuckhoe` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `quanlysuckhoe`;
@@ -36,7 +37,7 @@ CREATE TABLE `bacsi` (
   `SoDienThoai` varchar(10) NOT NULL,
   `Mail` varchar(255) NOT NULL,
   `ChuyenMon` varchar(255) NOT NULL,
-  `GioiTinh` varchar(3) NOT NULL
+  `GioiTinh` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -45,7 +46,8 @@ CREATE TABLE `bacsi` (
 
 INSERT INTO `bacsi` (`MaBacSi`, `TenBacSi`, `NgaySinh`, `SoDienThoai`, `Mail`, `ChuyenMon`, `GioiTinh`) VALUES
 ('BS001', 'Trần Văn Khôi', '1988-02-01', '0789171899', 'tranvankhoi@gmail.com', 'Khoa', 'Nam'),
-('BS002', 'Lê Thị Thảo', '1991-12-02', '0932860481', 'thao@gmail.com', 'Đa khoa', 'Nữ');
+('BS002', 'Lê Thị Thảo', '1991-12-02', '0932860481', 'thao@gmail.com', 'Đa khoa', 'Nữ'),
+('BS005', 'Trần Văn A', '2000-08-11', '1234567890', 'Tva@gmail.com', 'Ngoại khoa', 'Nam');
 
 -- --------------------------------------------------------
 
@@ -54,20 +56,12 @@ INSERT INTO `bacsi` (`MaBacSi`, `TenBacSi`, `NgaySinh`, `SoDienThoai`, `Mail`, `
 --
 
 CREATE TABLE `benhan` (
-  `MaBenhAn` varchar(255) NOT NULL,
-  `MaBenhNhan` varchar(255) NOT NULL,
-  `TenBenhVien` varchar(255) NOT NULL,
-  `DuongDan` varchar(255) NOT NULL,
-  `NgayTao` date NOT NULL DEFAULT current_timestamp()
+  `Id` int(11) NOT NULL,
+  `Id_BenhNhan` varchar(255) DEFAULT NULL,
+  `DuongDan` varchar(255) DEFAULT NULL,
+  `TenBenhVien` varchar(255) DEFAULT NULL,
+  `NgayNhapVien` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `benhan`
---
-
-INSERT INTO `benhan` (`MaBenhAn`, `MaBenhNhan`, `TenBenhVien`, `DuongDan`, `NgayTao`) VALUES
-('BA001', 'BN001', '', '', '2024-03-24'),
-('BA002', 'BN001', '', '', '2024-03-24');
 
 -- --------------------------------------------------------
 
@@ -80,10 +74,11 @@ CREATE TABLE `benhnhan` (
   `TenBenhNhan` varchar(255) NOT NULL,
   `NgaySinh` date NOT NULL,
   `SoDienThoai` varchar(10) NOT NULL,
-  `Mail` varchar(255) NOT NULL,
+  `Email` varchar(255) NOT NULL,
   `SoDienThoaiNguoiThan` varchar(10) NOT NULL,
-  `DiaChi` text NOT NULL,
-  `GioiTinh` varchar(3) NOT NULL,
+  `DiaChi` varchar(255) NOT NULL,
+  `Retoken` varchar(255) NOT NULL,
+  `GioiTinh` varchar(10) NOT NULL,
   `CanNang` float NOT NULL,
   `MaBacSi` varchar(255) NOT NULL,
   `Avatar` text NOT NULL
@@ -93,20 +88,31 @@ CREATE TABLE `benhnhan` (
 -- Dumping data for table `benhnhan`
 --
 
-INSERT INTO `benhnhan` (`MaBenhNhan`, `TenBenhNhan`, `NgaySinh`, `SoDienThoai`, `Mail`, `SoDienThoaiNguoiThan`, `DiaChi`, `GioiTinh`, `CanNang`, `MaBacSi`, `Avatar`) VALUES
-('BN001', 'Nguyễn Thị Ngọc', '1991-01-02', '0978981234', 'ngoc@gmail.com', '0937899789', 'Long Xuyên, An Giang', 'Nữ', 65, 'BS002', '1681843722484.png');
+INSERT INTO `benhnhan` (`MaBenhNhan`, `TenBenhNhan`, `NgaySinh`, `SoDienThoai`, `Email`, `SoDienThoaiNguoiThan`, `DiaChi`, `Retoken`, `GioiTinh`, `CanNang`, `MaBacSi`, `Avatar`) VALUES
+('BN001', 'Nguyễn Thị Ngọc', '1991-01-02', '0978981234', 'ngoc@gmail.com', '0937899789', 'Long Xuyên, An Giang', '1//0e2P8xwa6wa7gCgYIARAAGA4SNwF-L9IrV0Bc2MMkM66y1yo5zU9IJmUK0tH8PLfGvvor_qBBfDRv9nhoCrfavYPNzfsHxm9RLzo', 'Nữ', 65, 'BS001', '1681843722484.png'),
+('BN003', 'Anh', '2022-02-10', '1234567890', 'kn167235@gmail.com', '0376270328', 'long xuyên', '', 'Nữ', 45, 'BS002', '1711202880232.jpg'),
+('BN006', 'Nguyễn Văn A', '2012-06-22', '1234567890', 'hanh@gmail.com', '0376270328', 'long xuyên', '', 'Nam', 50, 'BS001', '1711202780292.jpg'),
+('BN007', 'Nguyễn Văn An', '2013-02-13', '1234567890', 'pl20092002@gmail.com', '5445655666', 'long xuyên', '1//0e51GvTBsE0yDCgYIARAAGA4SNwF-L9IreDkB8IrDRW4UBFCFHCr0UFFf2R5hLbcFNVL64eZBmgUhYtZ-75A8HqobaUTgsU2aw3g', 'Nam', 50, 'BS001', '1711621090270.jpg'),
+('BN009', 'Nguyễn B', '2022-06-15', '1234567890', 'kn167235@gmail.com', '0376270328', 'long xuyên', '1//0ehK_0W4mpFafCgYIARAAGA4SNwF-L9IrM9QHGXeGVxPPBtj8faeUP13XIS0fTlIMrok3FjXTwHYWvvjHQ-jBgR3gp9DOqG3gFhw', 'Nữ', 50, 'BS001', '1711620741331.jpg'),
+('BN0123', 'Nhật', '2022-02-02', '1234567890', 'hmnhat2002ap@gmail.com', '0376270328', 'long xuyên', '1//0e1f46yumzlrBCgYIARAAGA4SNwF-L9IrVjIYHj0AcBPo42XMN7dOYc4PTaNLvLLABzfNyvMpaE-0m-FQjsXFigefjSIim3hDa3k', 'Nam', 50, 'BS001', '1711624476598.jpg'),
+('BN11', 'Ngân', '2023-04-09', '1234567890', 'hanh@gmail.com', '5445655666', 'long xuyên', '1//0e4zvy3oGdLsKCgYIARAAGA4SNwF-L9IrXmHKY9XGt3HTI3KUDxmArC2VDX3nyPy6T4481mpJC7E0mD8zeCJmwuhE5PGbGwkU2Oo', 'Nữ', 45, 'BS002', '1688786232518.png'),
+('BN123', 'Nam', '2018-06-15', '1234567890', 'dtkngan@vnkgu.edu.vn', '0376270328', 'long xuyên', '1//0eLfPPqhVeOgVCgYIARAAGA4SNwF-L9IrbkpfD3lq151rN1Tq6fhJI9G4QBAlEo4kmsYbXuDwrpO2_eaHDDMfEPyLdYSztII6Lvs', 'Nam', 50, 'BS005', '1711624802394.jpg'),
+('BN777', 'Phan Quang Thái', '2024-04-17', '0111111111', 'phanquangthai2505@gmail.com', '0111111112', 'AG', '1//0en6g3V7n7RcqCgYIARAAGA4SNwF-L9IrELt6pEgPt7Ay8X_Mt7hsePyQ_8BXP5jt06SQBq1sX0jDUmHRw0XV9VRokXsvO4F6K_w', 'Nam', 20, 'BS002', '1712031865790.jpg');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cauhoi`
+-- Table structure for table `chisosuckhoe`
 --
 
-CREATE TABLE `cauhoi` (
-  `ID` int(11) NOT NULL,
-  `ID_BenhNhan` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `NoiDung` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+CREATE TABLE `chisosuckhoe` (
+  `Id` int(11) NOT NULL,
+  `MaBenhNhan` varchar(255) DEFAULT NULL,
+  `NhipTim` float DEFAULT NULL,
+  `SpO2` float DEFAULT NULL,
+  `HATThu` float DEFAULT NULL,
+  `HATTRUONG` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -115,43 +121,24 @@ CREATE TABLE `cauhoi` (
 --
 
 CREATE TABLE `chitiet_uongthuoc` (
-  `ID` int(11) NOT NULL,
-  `ID_GIoUongThuoc` int(11) NOT NULL,
-  `ID_Thuoc` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `giouongthuoc`
---
-
-CREATE TABLE `giouongthuoc` (
-  `ID` int(11) NOT NULL,
-  `ID_LichUongThuoc` int(11) NOT NULL,
-  `GioUong` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `hoidap_benhnhan`
---
-
-CREATE TABLE `hoidap_benhnhan` (
-  `ID` int(11) NOT NULL,
-  `MaBenhNhan` varchar(255) NOT NULL,
-  `NoiDung` text NOT NULL,
-  `NgayDang` date NOT NULL,
-  `TrangThai` int(11) NOT NULL
+  `Id` int(11) NOT NULL,
+  `Id_Thuoc` int(11) DEFAULT NULL,
+  `LieuLuong` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `hoidap_benhnhan`
+-- Table structure for table `hoidap`
 --
 
-INSERT INTO `hoidap_benhnhan` (`ID`, `MaBenhNhan`, `NoiDung`, `NgayDang`, `TrangThai`) VALUES
-(1, 'BN001', 'Xin chào, tôi có thể đặt 1 câu hỏi về sức khỏe hiện nay được không? Hiện nay tui đang gặp 1 số vấn về về hô hấp. Bác sĩ có thể giúp tôi một vài lới khuyên được không', '2023-04-19', 1);
+CREATE TABLE `hoidap` (
+  `Id` int(11) NOT NULL,
+  `Id_Noidung` int(11) DEFAULT NULL,
+  `Id_BenhNhan` varchar(255) DEFAULT NULL,
+  `Id_BacSi` varchar(255) DEFAULT NULL,
+  `NoiDung` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -160,10 +147,10 @@ INSERT INTO `hoidap_benhnhan` (`ID`, `MaBenhNhan`, `NoiDung`, `NgayDang`, `Trang
 --
 
 CREATE TABLE `lichkham` (
-  `MaLichKham` int(11) NOT NULL,
-  `MaBenhNhan` varchar(255) NOT NULL,
-  `MaBacSi` varchar(255) NOT NULL,
-  `NgayHen` datetime NOT NULL,
+  `Id` int(11) NOT NULL,
+  `Id_BenhNhan` varchar(255) NOT NULL,
+  `Id_BacSi` varchar(255) NOT NULL,
+  `NgayHen` date NOT NULL,
   `TrangThai` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -171,24 +158,8 @@ CREATE TABLE `lichkham` (
 -- Dumping data for table `lichkham`
 --
 
-INSERT INTO `lichkham` (`MaLichKham`, `MaBenhNhan`, `MaBacSi`, `NgayHen`, `TrangThai`) VALUES
-(1, 'BN001', 'BS002', '2024-03-22 16:07:55', 'Đã đặt'),
-(2, 'BN001', 'BS001', '2024-03-11 22:09:49', 'Chưa đặt');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `lichuongthuoc`
---
-
-CREATE TABLE `lichuongthuoc` (
-  `ID` int(11) NOT NULL,
-  `ID_BacSi` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `ID_BenhNhan` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `NgayBatDau` date NOT NULL,
-  `NgayKetThuc` date NOT NULL,
-  `MoTa` varchar(2000) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT INTO `lichkham` (`Id`, `Id_BenhNhan`, `Id_BacSi`, `NgayHen`, `TrangThai`) VALUES
+(1, 'BN001', 'BS002', '2024-04-10', 'Đã đặt');
 
 -- --------------------------------------------------------
 
@@ -197,7 +168,7 @@ CREATE TABLE `lichuongthuoc` (
 --
 
 CREATE TABLE `nguoidung` (
-  `ID` int(11) NOT NULL,
+  `Id` int(11) NOT NULL,
   `TenDangNhap` varchar(255) NOT NULL,
   `MatKhau` text NOT NULL,
   `Quyen` int(11) NOT NULL
@@ -207,24 +178,24 @@ CREATE TABLE `nguoidung` (
 -- Dumping data for table `nguoidung`
 --
 
-INSERT INTO `nguoidung` (`ID`, `TenDangNhap`, `MatKhau`, `Quyen`) VALUES
+INSERT INTO `nguoidung` (`Id`, `TenDangNhap`, `MatKhau`, `Quyen`) VALUES
+(0, 'BN777', '$2b$10$v1T82Dzht1FnpvFnWcI3nOhGZkrobUr0cpsenaVRsys0IM1E9z2x6', 3),
 (1, 'admin1', '$2b$10$kxveS/MI7sYSQA38eSqf1OBBIxGy0nw6FFouT4OYTMq2dJAYIIaYO', 1),
 (2, 'BS001', '$2b$10$ik0EuwnjjSGG3s.4wQgzpe4alFwg/GPGVehkuRCQ8B.4pfcwz5aGi', 2),
 (3, 'BS002', '$2b$10$cek/Ke2v4t2SChmwDmoKBe7aovwDTEsFMDh4KfChaNtEB9EQybuZK', 2),
-(4, 'BN001', '$2b$10$D5WYbrVztp0yfcJo96Ad0uA/6sWQi..2t3we6nIHGnLPLrLFFNwWS', 3);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `phanhoi`
---
-
-CREATE TABLE `phanhoi` (
-  `ID` int(11) NOT NULL,
-  `ID_hoi` int(11) NOT NULL,
-  `ID_BacSi` varchar(255) NOT NULL,
-  `NoiDung` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+(4, 'BN001', '$2b$10$D5WYbrVztp0yfcJo96Ad0uA/6sWQi..2t3we6nIHGnLPLrLFFNwWS', 3),
+(5, 'BN11', '$2b$10$8Ji9saVLW6Ejg7lBAhZfTOqQZcJsIlJqUPEBp6c27n8fmbmF6euMi', 3),
+(6, 'admin2', '$2b$10$Aasw0NxFKnFpS5Wmm6.JDeQf8NeB8ikjyhsThmQJ2rQUvwrKdLvby', 1),
+(7, 'BN004', '$2b$10$4oZIwWacJV35aDzFfeQgOejZVmy4vSQj31z2QMEKFKOcDrA3.Zlk2', 2),
+(8, 'BS004', '$2b$10$979e9HA5.2artXSppCoNDuQ8/MWbFqbDr.xIokpi1.af3NZYhLLm2', 2),
+(9, 'BS003', '$2b$10$Xdrg34RArA5NZEGvKizVvu6ofrqhJte468zsMR5A.1FaHAVaKNx0K', 2),
+(10, 'BN006', '$2b$10$jgPHqWiMxYgIbnJaApQ0s.RrkWPU8LJMNCpNn4j6IXfBd1F.3./zK', 3),
+(11, 'BN003', '$2b$10$ur2qpp1R4ojnfNLrmyYRCOpuDlT.8bqY27qowGzn2d6kvgQachOsK', 3),
+(12, 'BN009', '$2b$10$jmDWwydUiVjEeuEk.ka4auwWUV6cAqa7xmHmoLwl8l5EjY53rNNDy', 3),
+(13, 'BN007', '$2b$10$h1jslhyUBVXUPnGcqeidhebLNIlTwmXVEyvaCdHk1q4Hw.ZlpA1mW', 3),
+(14, 'BN0123', '$2b$10$phpzEkXKn52gf8OEDnvo5.CYxycBPuuFou0L0bj4DHEmKRLn923iS', 3),
+(15, 'BN123', '$2b$10$Yn500ejh3LngHbMpNunBJOUBzAndAeCkjJk1NGtVv3MhBUODrxC5K', 3),
+(16, 'BS005', '$2b$10$g6IXlTgtL62visVa70X/5.TsrzGtH8irKr8393HHB/4WUa771sY9i', 2);
 
 -- --------------------------------------------------------
 
@@ -233,13 +204,14 @@ CREATE TABLE `phanhoi` (
 --
 
 CREATE TABLE `thongbao_bacsi` (
-  `ID` int(10) NOT NULL,
-  `ID_BacSi` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `NoiDung` varchar(2000) NOT NULL,
-  `HinhAnh` varchar(255) NOT NULL,
-  `LoaiThongBao` varchar(255) NOT NULL,
-  `TrangThai` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `Id` int(11) NOT NULL,
+  `TieuDe` varchar(255) DEFAULT NULL,
+  `NoiDung` varchar(255) DEFAULT NULL,
+  `LoaiThongBao` varchar(20) DEFAULT NULL,
+  `Id_BacSi` varchar(255) DEFAULT NULL,
+  `ThoiGian` datetime DEFAULT NULL,
+  `TrangThai` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -248,13 +220,14 @@ CREATE TABLE `thongbao_bacsi` (
 --
 
 CREATE TABLE `thongbao_benhnhan` (
-  `ID` int(10) NOT NULL,
-  `ID_BenhNhan` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `NoiDung` varchar(2000) NOT NULL,
-  `HinhAnh` varchar(255) NOT NULL,
-  `LoaiThongBao` varchar(255) NOT NULL,
-  `TrangThai` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `Id` int(11) NOT NULL,
+  `TieuDe` varchar(255) DEFAULT NULL,
+  `NoiDung` varchar(255) DEFAULT NULL,
+  `LoaiThongBao` varchar(20) DEFAULT NULL,
+  `Id_BenhNhan` varchar(255) DEFAULT NULL,
+  `ThoiGian` datetime DEFAULT NULL,
+  `TrangThai` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -263,12 +236,48 @@ CREATE TABLE `thongbao_benhnhan` (
 --
 
 CREATE TABLE `thuoc` (
-  `ID` int(11) NOT NULL,
-  `LieuLuong` float NOT NULL,
-  `DonVi` varchar(255) NOT NULL,
-  `TacDungPhu` varchar(2000) NOT NULL,
-  `NoiDungKhac` varchar(2000) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `Id` int(11) NOT NULL,
+  `TenThuoc` varchar(255) DEFAULT NULL,
+  `DonVi` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `uongthuoc`
+--
+
+CREATE TABLE `uongthuoc` (
+  `Id` int(11) NOT NULL,
+  `NhacNho` varchar(255) DEFAULT NULL,
+  `GioUong` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `Id_BenhNhan` varchar(255) DEFAULT NULL,
+  `Id_Bacsi` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vitri_benhnhan`
+--
+
+CREATE TABLE `vitri_benhnhan` (
+  `Id` int(11) NOT NULL,
+  `Id_BenhNhan` varchar(255) DEFAULT NULL,
+  `Lat` decimal(9,6) DEFAULT NULL,
+  `Long` decimal(9,6) DEFAULT NULL,
+  `DiaChi` varchar(255) DEFAULT NULL,
+  `ThoiGian` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `vitri_benhnhan`
+--
+
+INSERT INTO `vitri_benhnhan` (`Id`, `Id_BenhNhan`, `Lat`, `Long`, `DiaChi`, `ThoiGian`) VALUES
+(1, 'BN001', 10.538695, 105.489525, 'Nhà trọ 5 Điền', '2024-04-03 06:14:25'),
+(2, 'BN003', 10.372597, 105.434140, 'Circle K', '2024-04-03 04:21:56'),
+(3, 'BN006', 10.373071, 105.433553, 'PhotcopyTam', '2024-04-03 04:22:06');
 
 --
 -- Indexes for dumped tables
@@ -284,8 +293,8 @@ ALTER TABLE `bacsi`
 -- Indexes for table `benhan`
 --
 ALTER TABLE `benhan`
-  ADD PRIMARY KEY (`MaBenhAn`),
-  ADD KEY `MaBenhNhan` (`MaBenhNhan`);
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `Id_BenhNhan` (`Id_BenhNhan`);
 
 --
 -- Indexes for table `benhnhan`
@@ -295,122 +304,133 @@ ALTER TABLE `benhnhan`
   ADD KEY `MaBacSi` (`MaBacSi`);
 
 --
--- Indexes for table `cauhoi`
+-- Indexes for table `chisosuckhoe`
 --
-ALTER TABLE `cauhoi`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_BenhNhan` (`ID_BenhNhan`);
+ALTER TABLE `chisosuckhoe`
+  ADD PRIMARY KEY (`Id`);
 
 --
 -- Indexes for table `chitiet_uongthuoc`
 --
 ALTER TABLE `chitiet_uongthuoc`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_GIoUongThuoc` (`ID_GIoUongThuoc`),
-  ADD KEY `ID_Thuoc` (`ID_Thuoc`);
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `Id_Thuoc` (`Id_Thuoc`);
 
 --
--- Indexes for table `giouongthuoc`
+-- Indexes for table `hoidap`
 --
-ALTER TABLE `giouongthuoc`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_LichUongThuoc` (`ID_LichUongThuoc`);
-
---
--- Indexes for table `hoidap_benhnhan`
---
-ALTER TABLE `hoidap_benhnhan`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `MaBenhNhan` (`MaBenhNhan`);
+ALTER TABLE `hoidap`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `Id_Noidung` (`Id_Noidung`),
+  ADD KEY `Id_BenhNhan` (`Id_BenhNhan`),
+  ADD KEY `Id_BacSi` (`Id_BacSi`);
 
 --
 -- Indexes for table `lichkham`
 --
 ALTER TABLE `lichkham`
-  ADD PRIMARY KEY (`MaLichKham`),
-  ADD KEY `MaBacSi` (`MaBacSi`),
-  ADD KEY `MaBenhNhan` (`MaBenhNhan`);
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `fk_lk_bs` (`Id_BacSi`),
+  ADD KEY `fk_lk_bn` (`Id_BenhNhan`);
 
 --
--- Indexes for table `lichuongthuoc`
+-- Indexes for table `nguoidung`
 --
-ALTER TABLE `lichuongthuoc`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_BacSi` (`ID_BacSi`),
-  ADD KEY `ID_BenhNhan` (`ID_BenhNhan`);
-
---
--- Indexes for table `phanhoi`
---
-ALTER TABLE `phanhoi`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_BacSi` (`ID_BacSi`);
+ALTER TABLE `nguoidung`
+  ADD PRIMARY KEY (`Id`);
 
 --
 -- Indexes for table `thongbao_bacsi`
 --
 ALTER TABLE `thongbao_bacsi`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_BacSi` (`ID_BacSi`);
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `Id_BacSi` (`Id_BacSi`);
 
 --
 -- Indexes for table `thongbao_benhnhan`
 --
 ALTER TABLE `thongbao_benhnhan`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_BenhNhan` (`ID_BenhNhan`);
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `Id_BenhNhan` (`Id_BenhNhan`);
 
 --
 -- Indexes for table `thuoc`
 --
 ALTER TABLE `thuoc`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`Id`);
+
+--
+-- Indexes for table `uongthuoc`
+--
+ALTER TABLE `uongthuoc`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `Id_BenhNhan` (`Id_BenhNhan`),
+  ADD KEY `Id_Bacsi` (`Id_Bacsi`);
+
+--
+-- Indexes for table `vitri_benhnhan`
+--
+ALTER TABLE `vitri_benhnhan`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `Id_BenhNhan` (`Id_BenhNhan`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `cauhoi`
+-- AUTO_INCREMENT for table `benhan`
 --
-ALTER TABLE `cauhoi`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `benhan`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `chitiet_uongthuoc`
 --
 ALTER TABLE `chitiet_uongthuoc`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `giouongthuoc`
+-- AUTO_INCREMENT for table `hoidap`
 --
-ALTER TABLE `giouongthuoc`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `hoidap`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `lichuongthuoc`
+-- AUTO_INCREMENT for table `lichkham`
 --
-ALTER TABLE `lichuongthuoc`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `lichkham`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `thongbao_bacsi`
 --
 ALTER TABLE `thongbao_bacsi`
-  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `thongbao_benhnhan`
 --
 ALTER TABLE `thongbao_benhnhan`
-  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `thuoc`
 --
 ALTER TABLE `thuoc`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `uongthuoc`
+--
+ALTER TABLE `uongthuoc`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vitri_benhnhan`
+--
+ALTER TABLE `vitri_benhnhan`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -420,7 +440,7 @@ ALTER TABLE `thuoc`
 -- Constraints for table `benhan`
 --
 ALTER TABLE `benhan`
-  ADD CONSTRAINT `benhan_ibfk_1` FOREIGN KEY (`MaBenhNhan`) REFERENCES `benhnhan` (`MaBenhNhan`);
+  ADD CONSTRAINT `benhan_ibfk_1` FOREIGN KEY (`Id_BenhNhan`) REFERENCES `benhnhan` (`MaBenhNhan`);
 
 --
 -- Constraints for table `benhnhan`
@@ -429,61 +449,50 @@ ALTER TABLE `benhnhan`
   ADD CONSTRAINT `benhnhan_ibfk_1` FOREIGN KEY (`MaBacSi`) REFERENCES `bacsi` (`MaBacSi`);
 
 --
--- Constraints for table `cauhoi`
---
-ALTER TABLE `cauhoi`
-  ADD CONSTRAINT `cauhoi_ibfk_1` FOREIGN KEY (`ID_BenhNhan`) REFERENCES `benhnhan` (`MaBenhNhan`);
-
---
 -- Constraints for table `chitiet_uongthuoc`
 --
 ALTER TABLE `chitiet_uongthuoc`
-  ADD CONSTRAINT `chitiet_uongthuoc_ibfk_1` FOREIGN KEY (`ID_GIoUongThuoc`) REFERENCES `giouongthuoc` (`ID`),
-  ADD CONSTRAINT `chitiet_uongthuoc_ibfk_2` FOREIGN KEY (`ID_Thuoc`) REFERENCES `thuoc` (`id`);
+  ADD CONSTRAINT `chitiet_uongthuoc_ibfk_1` FOREIGN KEY (`Id_Thuoc`) REFERENCES `thuoc` (`Id`);
 
 --
--- Constraints for table `giouongthuoc`
+-- Constraints for table `hoidap`
 --
-ALTER TABLE `giouongthuoc`
-  ADD CONSTRAINT `giouongthuoc_ibfk_1` FOREIGN KEY (`ID_LichUongThuoc`) REFERENCES `lichuongthuoc` (`ID`);
-
---
--- Constraints for table `hoidap_benhnhan`
---
-ALTER TABLE `hoidap_benhnhan`
-  ADD CONSTRAINT `hoidap_benhnhan_ibfk_1` FOREIGN KEY (`MaBenhNhan`) REFERENCES `benhnhan` (`MaBenhNhan`);
+ALTER TABLE `hoidap`
+  ADD CONSTRAINT `hoidap_ibfk_1` FOREIGN KEY (`Id_Noidung`) REFERENCES `hoidap` (`Id`),
+  ADD CONSTRAINT `hoidap_ibfk_2` FOREIGN KEY (`Id_BenhNhan`) REFERENCES `benhnhan` (`MaBenhNhan`),
+  ADD CONSTRAINT `hoidap_ibfk_3` FOREIGN KEY (`Id_BacSi`) REFERENCES `bacsi` (`MaBacSi`);
 
 --
 -- Constraints for table `lichkham`
 --
 ALTER TABLE `lichkham`
-  ADD CONSTRAINT `lichkham_ibfk_1` FOREIGN KEY (`MaBacSi`) REFERENCES `bacsi` (`MaBacSi`),
-  ADD CONSTRAINT `lichkham_ibfk_2` FOREIGN KEY (`MaBenhNhan`) REFERENCES `benhnhan` (`MaBenhNhan`);
-
---
--- Constraints for table `lichuongthuoc`
---
-ALTER TABLE `lichuongthuoc`
-  ADD CONSTRAINT `lichuongthuoc_ibfk_1` FOREIGN KEY (`ID_BacSi`) REFERENCES `bacsi` (`MaBacSi`),
-  ADD CONSTRAINT `lichuongthuoc_ibfk_2` FOREIGN KEY (`ID_BenhNhan`) REFERENCES `benhnhan` (`MaBenhNhan`);
-
---
--- Constraints for table `phanhoi`
---
-ALTER TABLE `phanhoi`
-  ADD CONSTRAINT `phanhoi_ibfk_1` FOREIGN KEY (`ID_BacSi`) REFERENCES `bacsi` (`MaBacSi`);
+  ADD CONSTRAINT `fk_lk_bn` FOREIGN KEY (`Id_BenhNhan`) REFERENCES `benhnhan` (`MaBenhNhan`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_lk_bs` FOREIGN KEY (`Id_BacSi`) REFERENCES `bacsi` (`MaBacSi`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `thongbao_bacsi`
 --
 ALTER TABLE `thongbao_bacsi`
-  ADD CONSTRAINT `thongbao_bacsi_ibfk_1` FOREIGN KEY (`ID_BacSi`) REFERENCES `bacsi` (`MaBacSi`);
+  ADD CONSTRAINT `thongbao_bacsi_ibfk_1` FOREIGN KEY (`Id_BacSi`) REFERENCES `bacsi` (`MaBacSi`);
 
 --
 -- Constraints for table `thongbao_benhnhan`
 --
 ALTER TABLE `thongbao_benhnhan`
-  ADD CONSTRAINT `thongbao_benhnhan_ibfk_1` FOREIGN KEY (`ID_BenhNhan`) REFERENCES `benhnhan` (`MaBenhNhan`);
+  ADD CONSTRAINT `thongbao_benhnhan_ibfk_1` FOREIGN KEY (`Id_BenhNhan`) REFERENCES `benhnhan` (`MaBenhNhan`);
+
+--
+-- Constraints for table `uongthuoc`
+--
+ALTER TABLE `uongthuoc`
+  ADD CONSTRAINT `uongthuoc_ibfk_1` FOREIGN KEY (`Id_BenhNhan`) REFERENCES `benhnhan` (`MaBenhNhan`),
+  ADD CONSTRAINT `uongthuoc_ibfk_2` FOREIGN KEY (`Id_Bacsi`) REFERENCES `bacsi` (`MaBacSi`);
+
+--
+-- Constraints for table `vitri_benhnhan`
+--
+ALTER TABLE `vitri_benhnhan`
+  ADD CONSTRAINT `vitri_benhnhan_ibfk_1` FOREIGN KEY (`Id_BenhNhan`) REFERENCES `benhnhan` (`MaBenhNhan`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
