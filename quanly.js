@@ -11,7 +11,7 @@ const request = require("request");
 const cors = require("cors");
 //phân tích URL
 const urlParse = require("url-parse");
-//phân tích và xử lý các chuỗi query parameters của URL 
+// phân tích và xử lý các chuỗi query parameters của URL 
 const queryParse = require("query-string");
 const bodyParser = require("body-parser");
 const axios = require("axios");
@@ -1295,12 +1295,12 @@ app.get('/hoidap_benhnhan', (req, res) => {
   res.render('hoidap_benhnhan', { un: req.session.username })
 })
 app.post('/hoidap_benhnhan', (req, res) => {
-  let u = req.body.MaBenhNhan;
+  let u = req.body.Id_BenhNhan;
   let n = req.body.NoiDung;
   var today = new Date();
   var d = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
-  let user_info = { MaBenhNhan: u, NoiDung: n, NgayDang: d, TinhTrang: "0" };
+  let user_info = { Id_BenhNhan: u, NoiDung: n, NgayDang: d, TinhTrang: "0" };
   let sql = 'INSERT INTO hoidap_benhnhan SET ?';
   db.query(sql, user_info);
   res.redirect("/hosobenhnhan");
@@ -1854,7 +1854,7 @@ app.get('/xembenhnhanbacsi', async (req, res) => {
 
 app.get('/hoidap_bacsi', (req, res) => {
   let mabacsi = req.session.username;
-  let sql = `SELECT * FROM hoidap_benhnhan, benhnhan WHERE hoidap_benhnhan.MaBenhNhan=benhnhan.MaBenhNhan AND hoidap_benhnhan.TinhTrang=0 AND benhnhan.MaBacSi='` + mabacsi + `'`;
+  let sql = `SELECT * FROM hoidap_benhnhan, benhnhan WHERE hoidap_benhnhan.Id_BenhNhan=benhnhan.MaBenhNhan AND hoidap_benhnhan.TinhTrang=0 AND benhnhan.MaBacSi='` + mabacsi + `'`;
 
   db.query(sql, function (err, data) { // biến data chứa kết quả truy vấn
     if (err) throw err;
@@ -1887,7 +1887,7 @@ app.get('/xemphanhoi', (req, res) => {
   let mabenhnhan = req.session.username;
   console.log(mabenhnhan);
 
-  let sql = `SELECT hoidap_benhnhan.NoiDung AS cauhoi, phanhoi.NoiDung AS phanhoi FROM hoidap_benhnhan, phanhoi WHERE hoidap_benhnhan.MaBenhNhan='` + mabenhnhan + `' AND hoidap_benhnhan.Id=phanhoi.ID_hoi AND hoidap_benhnhan.TinhTrang='1'`;
+  let sql = `SELECT hoidap_benhnhan.NoiDung AS cauhoi, phanhoi.NoiDung AS phanhoi FROM hoidap_benhnhan, phanhoi WHERE hoidap_benhnhan.Id_BenhNhan='` + mabenhnhan + `' AND hoidap_benhnhan.Id=phanhoi.ID_hoi AND hoidap_benhnhan.TinhTrang='1'`;
 
   db.query(sql, function (err, data) { // biến data chứa kết quả truy vấn
     if (err) throw err;
