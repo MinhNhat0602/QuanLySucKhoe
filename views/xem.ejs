@@ -97,7 +97,7 @@
           <div class="container">
             <div class="row">
               <div class="col">
-                <img src="uploads/<%= benhnhan.Avatar %>" width="200" class="mx-auto d-block" />
+                <img src="uploads/<%= benhnhan.Avatar %>" width="200" class="mx-auto d-block avatar" />
               </div>
               <div class="col-8">
                 <div class="card">
@@ -179,7 +179,7 @@
                     <p class="mb-0">Mã bệnh nhân</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-0">
+                    <p class="text-muted mb-0 mabenhnhan">
                       <%= benhnhan.MaBenhNhan %>
                     </p>
                   </div>
@@ -190,7 +190,7 @@
                     <p class="mb-0">Họ tên</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-0">
+                    <p class="text-muted mb-0 tenbenhnhan">
                       <%= benhnhan.TenBenhNhan %>
                     </p>
                   </div>
@@ -321,30 +321,14 @@
     }, 60000);
   </script>
   <script>
-    // var map = L.map('map');
-    // map.setView([10.573272, 104.5158302], 6);
-    // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //     maxZoom: 19,
-    //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    // }).addTo(map);
-
-    // navigator.geolocation.watchPosition(success, error);
-
-    // function success(pos) {
-    //     // const lat = document.querySelector('.lat');
-    //     // const lng = document.querySelector('.lng');
-    //     var lat = document.querySelector('.lat').innerHTML;
-    //     var lng = document.querySelector('.lng').innerHTML;
-    //     const accuracy = pos.coords.accuracy;
-
-    //     let marker = L.marker([lat, lng]).addTo(map);
-    //     let circle = L.circle([lat, lng], {radius: accuracy}).addTo(map);
-
-    //     map.fitBounds(circle.getBounds());
-    // }
 
     const lat = document.querySelector('.lat').innerHTML;
     const lng = document.querySelector('.lng').innerHTML;
+    const ma = document.querySelector('.mabenhnhan').innerHTML;
+    const ten = document.querySelector('.tenbenhnhan').innerHTML;
+    const avatar = document.querySelector('.avatar').src;
+    console.log(avatar);
+    
     var map = L.map('map').setView([lat, lng], 16);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -358,14 +342,17 @@
       radius: 500
     }).addTo(map);
 
-    var popup = L.popup()
-    .setLatLng([lat, lng])
-    .setContent("Bệnh nhân ở đây")
-    .openOn(map);
-
     L.marker([lat, lng], {
-      title: "Địa chỉ Bệnh Nhân",
-    }).addTo(map)
+      title: "Vị trí bệnh nhân",
+    }).addTo(map).bindPopup('<h6>ID Bệnh Nhân: ' + ma + '<br>' + ' Tên Bệnh Nhân: ' + ten + '</h6><img style="width:100px;" src=' + avatar + '>');
+
+    // var popup = L.popup({
+    //   closeOnClick: false
+    // })
+    // .setLatLng([lat, lng])
+    // .setContent('<h6>Id: ' + ma +'<br>'+ ' Name: ' + ten + '</h6>')
+    // .openOn(map);
+
   </script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>

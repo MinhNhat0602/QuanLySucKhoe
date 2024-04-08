@@ -23,6 +23,10 @@ const { response } = require("express");
 var nodemailer = require('nodemailer');
 //xử lý dữ liệu đa phương tiện
 const multer = require('multer');
+//Bot telegram
+const TelegramBot = require('node-telegram-bot-api');
+const token = '6772120862:AAESMVkwrGRWW2OyKupw9Kq6c0dWe4Dwff8';
+const bot = new TelegramBot(token, {polling: true});
 //làm việc với đường dẫn tệp và thư mục
 const path = require('path')
 //Chuyển đổi dữ liệu JSON thành JavaScrip
@@ -68,12 +72,44 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 })
 
 var session = require('express-session');
+const { connect } = require("http2");
+const { error } = require("console");
 app.use(session({
   secret: 'abcdefg',
   resave: true,
   saveUninitialized: true,
   cookie: { maxAge: 3600000 }
 }));
+
+//Bot Telegram
+bot.onText(/\/start/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, "Chào bạn! Đây là bot thông báo về sức khoẻ của bạn");
+});
+
+bot.onText(/\/send_notification/, (msg) => {
+  const chatId = msg.chat.id;
+
+  const query = 'SELECT * FROM chisosuckhoe';
+  connection.query(query, (error, results, fields) => {
+    if(error){
+      console.error('Lỗi truy vấn cơ sở dữ liệu', error);
+      bot.sendMessage(chatId, "Đã xảy ra lỗi khi truy vấn cơ sở dữ liệu");
+      return;
+    }
+
+    else if(results.length > 0){
+      const healthData = results[0];
+      const message = 'Thông báo sức khoẻ mới nhất: \n\nNhịp tim: ${chisosuckhoe.NhipTim bpm\nSpO2: ${chisosuckhoe.SpO2} \nHuyết áp tâm trương: ${chisosuckhoe.HATTRUONG} \nHuyết áp tâm thu: ${chisosuckhoe.HATThu}}'
+
+      bot.sendMessage(chatId, message);
+    }else{
+      bot.sendMessage(chatId,'Không có dữ liệu sức khoẻ');
+    }
+  });
+  // const message = 'Chỉ số sức khoẻ của bạn bình thường';
+  // bot.sendMessage(chatId, message);
+});
 
 //Thêm Bệnh Nhân
 app.get('/themBenhNhan', (req, res) => {
